@@ -1,0 +1,780 @@
+Sun Apr 25 23:37:37 PDT 2021
+Linux csslab1.uwb.edu 3.10.0-1160.24.1.el7.x86_64 #1 SMP Thu Apr 8 19:51:47 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+uid=939918(asmith45) gid=2120939918(asmith45) groups=2120939918(asmith45),605559(lab-access)
+=====================================================
+1. Compiles without warnings with -Wall -Wextra flags
+=====================================================
+=====================================================
+2. Runs and produces correct output
+=====================================================
+test1 complete
+test2 complete
+test3 complete
+test4 complete
+test5 complete
+test6 complete
+test7 complete
+test8 complete
+test9 complete
+Done.
+=====================================================
+3. clang-tidy warnings are fixed
+=====================================================
+11349 warnings generated.
+23578 warnings generated.
+Suppressed 23583 warnings (23578 in non-user code, 5 NOLINT).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+=====================================================
+4. clang-format does not find any formatting issues
+=====================================================
+Running clang-format on ./main.cpp
+Running clang-format on ./timespan.cpp
+=====================================================
+5. No memory leaks using g++
+=====================================================
+=====================================================
+6. No memory leaks using valgrind, look for "definitely lost" 
+=====================================================
+==11994== Memcheck, a memory error detector
+==11994== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==11994== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==11994== Command: ./a.out
+==11994== Parent PID: 11895
+==11994== 
+==11994== 
+==11994== HEAP SUMMARY:
+==11994==     in use at exit: 0 bytes in 0 blocks
+==11994==   total heap usage: 1 allocs, 1 frees, 72,704 bytes allocated
+==11994== 
+==11994== All heap blocks were freed -- no leaks are possible
+==11994== 
+==11994== For lists of detected and suppressed errors, rerun with: -s
+==11994== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+=====================================================
+7. Tests have full code coverage
+=====================================================
+File '/home/NETID/asmith45/main.cpp':
+Name                        Regions    Miss   Cover     Lines    Miss   Cover
+-----------------------------------------------------------------------------
+test1()                           1       0 100.00%        22       0 100.00%
+test2()                           1       0 100.00%        15       0 100.00%
+test3()                           1       0 100.00%        10       0 100.00%
+test4()                           1       0 100.00%        26       0 100.00%
+test5()                           1       0 100.00%        39       0 100.00%
+test6()                           1       0 100.00%        10       0 100.00%
+test7()                           1       0 100.00%        11       0 100.00%
+test8()                           1       0 100.00%        16       0 100.00%
+test9()                           1       0 100.00%        12       0 100.00%
+main                              1       0 100.00%        13       0 100.00%
+-----------------------------------------------------------------------------
+TOTAL                            10       0 100.00%       174       0 100.00%
+
+File '/home/NETID/asmith45/timespan.cpp':
+Name                                          Regions    Miss   Cover     Lines    Miss   Cover
+-----------------------------------------------------------------------------------------------
+operator<<(std::ostream&, TimeSpan const&)         42       0 100.00%        30       0 100.00%
+TimeSpan::TimeSpan(double, double, double)         21       0 100.00%        51       0 100.00%
+TimeSpan::getHour() const                           1       0 100.00%         1       0 100.00%
+TimeSpan::getMinute() const                         1       0 100.00%         1       0 100.00%
+TimeSpan::getSecond() const                         1       0 100.00%         1       0 100.00%
+TimeSpan::isPositive() const                        5       0 100.00%         4       0 100.00%
+TimeSpan::operator+(TimeSpan const&) const         11       0 100.00%        27       0 100.00%
+TimeSpan::operator-(TimeSpan const&) const         15       0 100.00%        27       0 100.00%
+TimeSpan::operator*(unsigned int) const            11       0 100.00%        27       0 100.00%
+TimeSpan::operator==(TimeSpan const&) const         9       0 100.00%        12       0 100.00%
+TimeSpan::operator!=(TimeSpan const&) const         7       0 100.00%        14       0 100.00%
+TimeSpan::operator>(TimeSpan const&) const         18       0 100.00%        18       0 100.00%
+TimeSpan::operator<(TimeSpan const&) const         18       0 100.00%        18       0 100.00%
+TimeSpan::operator<=(TimeSpan const&) const        25       0 100.00%        20       0 100.00%
+TimeSpan::operator>=(TimeSpan const&) const        25       0 100.00%        20       0 100.00%
+TimeSpan::operator+=(TimeSpan const&) const        11       0 100.00%        27       0 100.00%
+TimeSpan::operator-=(TimeSpan const&) const        15       0 100.00%        27       0 100.00%
+-----------------------------------------------------------------------------------------------
+TOTAL                                             236       0 100.00%       325       0 100.00%
+/home/NETID/asmith45/main.cpp:
+    1|       |//
+    2|       |// Created by Yusuf Pisan on 4/2/18.
+    3|       |// Modified by Alexander Smith on 4/22/21
+    4|       |// This file is the driver function for the TimeSpan class. It tests every line
+    5|       |// of code in timespan.cpp and ensures that everything is in working order.
+    6|       |//
+    7|       |#include <cassert>
+    8|       |#include <iostream>
+    9|       |#include <sstream>
+   10|       |
+   11|       |#include "timespan.h"
+   12|       |
+   13|       |using namespace std;
+   14|       |
+   15|       |// testing constructor
+   16|      1|void test1() {
+   17|      1|  TimeSpan ts(1, 20, 30);
+   18|      1|  stringstream ss;
+   19|      1|  ss << ts;
+   20|      1|  assert(ss.str() == "1:20:30");
+   21|      1|  TimeSpan ts2(4, -20, -90);
+   22|      1|  ss.str("");
+   23|      1|  ss << ts2;
+   24|      1|
+   25|      1|  assert(ss.str() == "3:38:30");
+   26|      1|
+   27|      1|  TimeSpan ts3(1.5, 30.5, -90);
+   28|      1|  ss.str("");
+   29|      1|  ss << ts3;
+   30|      1|  assert(ss.str() == "1:59:00");
+   31|      1|
+   32|      1|  TimeSpan ts4(0, 0.07, 0);
+   33|      1|  ss.str("");
+   34|      1|  ss << ts4;
+   35|      1|  assert(ss.str() == "0:00:04");
+   36|      1|  cout << "test1 complete" << endl;
+   37|      1|}
+   38|       |
+   39|       |// testing equality, addition, subtraction, multiplication
+   40|      1|void test2() {
+   41|      1|  TimeSpan ts(1, 20, 30);
+   42|      1|  TimeSpan ts2(1, 20, 30);
+   43|      1|  TimeSpan ts3(0, 0, 0);
+   44|      1|  assert(ts == ts2);
+   45|      1|  assert(!(ts != ts2));
+   46|      1|  assert(ts != ts3);
+   47|      1|  assert((ts + ts + ts) == (ts2 * 3));
+   48|      1|  assert((ts * 5) == (ts2 * 4) + ts2);
+   49|      1|  assert((ts * 5) == (ts2 * 6) - ts2);
+   50|      1|  assert((ts + ts - ts) == ((ts2 * 2) - ts));
+   51|      1|  assert((ts - ts2) == ts3);
+   52|      1|  assert((ts3 * 5) == ts3);
+   53|      1|  cout << "test2 complete" << endl;
+   54|      1|}
+   55|       |
+   56|       |// Testing handling negatives
+   57|      1|void test3() {
+   58|      1|  TimeSpan ts0(0, 0, 0);
+   59|      1|  TimeSpan ts1(0, 0, 10);
+   60|      1|  TimeSpan ts2 = ts0 - ts1;
+   61|      1|  assert(ts1.isPositive() && !ts2.isPositive());
+   62|      1|  stringstream ss;
+   63|      1|  ss << ts2;
+   64|      1|  assert(ss.str() == "-0:00:10");
+   65|      1|  cout << "test3 complete" << endl;
+   66|      1|}
+   67|       |// Tests += and -= to make sure they are equivelent to + and -. These are the
+   68|       |// same so we only need t ocompleatly cover 1.
+   69|      1|void test4() {
+   70|      1|  TimeSpan ts0(2, 5, 9);
+   71|      1|  TimeSpan ts(1, 20, 30);
+   72|      1|  TimeSpan ts2(1, 20, 30);
+   73|      1|  TimeSpan ts3(0, 0, 0);
+   74|      1|  TimeSpan ts5(0, 0, 0);
+   75|      1|  TimeSpan ts6(0, 0, 10);
+   76|      1|  TimeSpan ts7 = ts5 -= ts6;
+   77|      1|  TimeSpan ts8 = ts2 -= ts * 2;
+   78|      1|  TimeSpan ts9 = ts0 -= ts6;
+   79|      1|  assert((ts0 += ts0) == (ts0 + ts0));   // NOLINT
+   80|      1|  assert((ts0 -= ts0) == (ts0 - ts0));   // NOLINT
+   81|      1|  assert((ts += ts += ts) == (ts2 * 3)); // NOLINT
+   82|      1|  assert((ts -= ts2) == ts3);            // NOLINT
+   83|      1|  stringstream ss;
+   84|      1|  ss.str("");
+   85|      1|  ss << ts7;
+   86|      1|  assert(ss.str() == "-0:00:10");
+   87|      1|  ss.str("");
+   88|      1|  ss << ts8;
+   89|      1|  assert(ss.str() == "-2:39:30");
+   90|      1|  ss.str("");
+   91|      1|  ss << ts9;
+   92|      1|  assert(ss.str() == "2:04:59");
+   93|      1|  cout << "test4 complete" << endl;
+   94|      1|}
+   95|       |// Tests >=, >, <, <=
+   96|      1|void test5() {
+   97|      1|  TimeSpan ts0(1, 2, 4);
+   98|      1|  TimeSpan ts1(2, 4, 6);
+   99|      1|  TimeSpan ts2(2, 4, 6);
+  100|      1|  TimeSpan ts3(2, 5, 7);
+  101|      1|  TimeSpan ts4(2, 4, 7);
+  102|      1|  TimeSpan ts5(2, 4, 8);
+  103|      1|  assert(ts0 < ts1);
+  104|      1|  assert(ts0 <= ts1);
+  105|      1|  assert(ts1 > ts0);
+  106|      1|  assert(ts1 >= ts0);
+  107|      1|  assert(ts2 >= ts1);
+  108|      1|  assert(!(ts2 > ts1));
+  109|      1|  assert(ts2 <= ts1);
+  110|      1|  assert(!(ts2 < ts1));
+  111|      1|  assert(!(ts0 > ts1));
+  112|      1|  assert(!(ts0 >= ts1));
+  113|      1|  assert(!(ts1 < ts0));
+  114|      1|  assert(!(ts1 <= ts0));
+  115|      1|  assert(ts3 > ts2);
+  116|      1|  assert(ts3 >= ts2);
+  117|      1|  assert(ts4 > ts2);
+  118|      1|  assert(ts4 >= ts2);
+  119|      1|  assert(ts2 < ts3);
+  120|      1|  assert(ts2 <= ts3);
+  121|      1|  assert(ts2 < ts4);
+  122|      1|  assert(ts2 <= ts4);
+  123|      1|  assert(ts4 > ts2);
+  124|      1|  assert(ts4 >= ts2);
+  125|      1|  assert(!(ts4 > ts3));
+  126|      1|  assert(!(ts4 >= ts3));
+  127|      1|  assert(!(ts4 > ts5));
+  128|      1|  assert(!(ts4 >= ts5));
+  129|      1|  assert(!(ts3 < ts4));
+  130|      1|  assert(!(ts3 <= ts4));
+  131|      1|  assert(!(ts5 < ts4));
+  132|      1|  assert(!(ts5 <= ts4));
+  133|      1|  cout << "test5 complete" << endl;
+  134|      1|}
+  135|       |// Tests the get methods
+  136|      1|void test6() {
+  137|      1|  TimeSpan ts0(1, 2, 4);
+  138|      1|  bool passTest = ts0.getHour() == 1;
+  139|      1|  assert(passTest);
+  140|      1|  passTest = ts0.getMinute() == 2;
+  141|      1|  assert(passTest);
+  142|      1|  passTest = ts0.getSecond() == 4;
+  143|      1|  assert(passTest);
+  144|      1|  cout << "test6 complete" << endl;
+  145|      1|}
+  146|       |// Closes off ==
+  147|      1|void test7() {
+  148|      1|  TimeSpan ts0(1, 2, 3);
+  149|      1|  TimeSpan ts1(1, 2, 4);
+  150|      1|  TimeSpan ts2(1, 3, 4);
+  151|      1|  TimeSpan ts3(0, 2, 3);
+  152|      1|  assert(!(ts0 == ts1));
+  153|      1|  assert(!(ts1 == ts2));
+  154|      1|  assert(!(ts0 == ts2));
+  155|      1|  assert(!(ts3 == ts0));
+  156|      1|  cout << "test7 complete" << endl;
+  157|      1|}
+  158|       |
+  159|       |// Closes off the constructor
+  160|      1|void test8() {
+  161|      1|  TimeSpan ts0(-4, -5, -7);
+  162|      1|  stringstream ss;
+  163|      1|  ss.str("");
+  164|      1|  ss << ts0;
+  165|      1|  assert(ss.str() == "-5:54:53");
+  166|      1|  TimeSpan ts1(0, 0, 90);
+  167|      1|  ss.str("");
+  168|      1|  ss << ts1;
+  169|      1|  assert(ss.str() == "0:01:30");
+  170|      1|  TimeSpan ts2(0, 90, 0);
+  171|      1|  ss.str("");
+  172|      1|  ss << ts2;
+  173|      1|  assert(ss.str() == "1:30:00");
+  174|      1|  cout << "test8 complete" << endl;
+  175|      1|}
+  176|       |// Closes off the printer.
+  177|      1|void test9() {
+  178|      1|  TimeSpan ts0(-4, -11, -51);
+  179|      1|  stringstream ss;
+  180|      1|  ss.str("");
+  181|      1|  ss << ts0;
+  182|      1|  assert(ss.str() == "-5:48:09");
+  183|      1|  TimeSpan ts1(-4, -51, -51);
+  184|      1|  ss.str("");
+  185|      1|  ss << ts1;
+  186|      1|  assert(ss.str() == "-5:08:09");
+  187|      1|  cout << "test9 complete" << endl;
+  188|      1|}
+  189|       |
+  190|      1|int main() {
+  191|      1|  test1();
+  192|      1|  test2();
+  193|      1|  test3();
+  194|      1|  test4();
+  195|      1|  test5();
+  196|      1|  test6();
+  197|      1|  test7();
+  198|      1|  test8();
+  199|      1|  test9();
+  200|      1|  cout << "Done." << std::endl;
+  201|      1|  return 0;
+  202|      1|}
+
+/home/NETID/asmith45/timespan.cpp:
+    1|       |/*
+    2|       |// Created by Yusuf Pisan on 4/2/18.
+    3|       |// Modified by Alexander Smith on 4/21/18
+    4|       |// This file is the main file containing the code for the TimeSpan class. This
+    5|       |file has  operators
+    6|       |// such as o >,<,<=,>=, *, +,-, and <<. Additionally, this file has 3 getter
+    7|       |methods that will get the
+    8|       |// hour, minute, and second count for the class.
+    9|       |// The class is able to dynamically carry over values from a excess of seconds
+   10|       |or minutes and increase the
+   11|       |// count of the next higher variable as needed.
+   12|       |//
+   13|       |*/
+   14|       |
+   15|       |#include "timespan.h"
+   16|       |#include <cmath>
+   17|       |using namespace std;
+   18|       |
+   19|       |// This method prints out the information of the class in a format. It responds
+   20|       |// based on if the time is negatively aligned or positively. Pre Condition: A
+   21|       |// TimeSpan is being printed. Post Condition: The time is printed out in a
+   22|       |// "X:XX:XX" format.
+   23|     13|ostream &operator<<(ostream &out, const TimeSpan &ts) {
+   24|     13|  bool printPositive = ts.isPositive();
+   25|     13|  if (printPositive) {
+   26|      7|    if (ts.minutes > 9 && ts.seconds > 9) {
+   27|      2|      out << ts.hours << ':' << ts.minutes << ':' << ts.seconds;
+   28|      5|    } else if (ts.minutes < 10 && ts.seconds > 9) {
+   29|      2|      out << ts.hours << ':' << 0 << ts.minutes << ':' << ts.seconds;
+   30|      3|    } else if (ts.minutes > 9 && ts.seconds < 10) {
+   31|      2|      out << ts.hours << ':' << ts.minutes << ':' << 0 << ts.seconds;
+   32|      2|    } else if (ts.minutes < 10 && ts.seconds < 10) {
+   33|      1|      out << ts.hours << ':' << 0 << ts.minutes << ':' << 0 << ts.seconds;
+   34|      1|    }
+   35|      7|
+   36|      7|  } else {
+   37|      6|    double secondValue = abs(ts.seconds);
+   38|      6|    double minuteValue = abs(ts.minutes);
+   39|      6|    double hourValue = abs(ts.hours);
+   40|      6|    if (secondValue > 9 && minuteValue > 9) {
+   41|      2|      out << '-' << hourValue << ':' << minuteValue << ':' << secondValue;
+   42|      4|    } else if (minuteValue < 10 && secondValue > 9) {
+   43|      2|      out << '-' << hourValue << ':' << 0 << minuteValue << ':' << secondValue;
+   44|      2|    } else if (minuteValue > 9 && secondValue < 10) {
+   45|      1|      out << '-' << hourValue << ':' << minuteValue << ':' << 0 << secondValue;
+   46|      1|    } else if (minuteValue < 10 && secondValue < 10) {
+   47|      1|      out << '-' << hourValue << ':' << 0 << minuteValue << ':' << 0
+   48|      1|          << secondValue;
+   49|      1|    }
+   50|      6|  }
+   51|     13|  return out;
+   52|     13|}
+   53|       |
+   54|       |/* This is the consturctor for Time Span. It takes in an hour, minute, and
+   55|       |second count.
+   56|       |// If it gets none of these, it will set them all equal to 0.
+   57|       |// It goes through the values passed in and makes sure they are all converted to
+   58|       |proper clock times.
+   59|       |// It will aslo properly assign negative values if they are passed in.
+   60|       |// Pre-Condition: An hour, minute, and second is passed in or it is called by
+   61|       |itself.
+   62|       |//Post-Condition: A TimeSpan is made with an hour, minute, and second count.
+   63|       |*/
+   64|     59|TimeSpan::TimeSpan(double hour, double minute, double second) {
+   65|     59|  double mainNumber;
+   66|     59|  double remainder = modf(hour, &mainNumber);
+   67|     59|  if (remainder != 0) {
+   68|      1|    remainder = remainder * 60;
+   69|      1|    minute = remainder + minute;
+   70|      1|    hour = mainNumber;
+   71|      1|  }
+   72|     59|  mainNumber = 0;
+   73|     59|  remainder = modf(minute, &mainNumber);
+   74|     59|  if (remainder != 0) {
+   75|      2|    remainder = remainder * 60;
+   76|      2|    second = remainder + second;
+   77|      2|    minute = mainNumber;
+   78|      2|  }
+   79|     59|  mainNumber = 0;
+   80|     59|  remainder = modf(second, &mainNumber); // NOLINT
+   81|     59|  remainder = 0;
+   82|     59|  second = mainNumber + remainder;
+   83|     59|  bool balanced = false;
+   84|     59|  double carryOver = 0;
+   85|     59|  double checkValue = second;
+   86|    125|  while (!balanced) {
+   87|     66|    if (checkValue >= 60) {
+   88|      1|      carryOver++;
+   89|      1|      checkValue = checkValue - 60;
+   90|      1|
+   91|     65|    } else if (checkValue >= 0) {
+   92|     59|      balanced = true;
+   93|     59|    } else {
+   94|      6|      carryOver--;
+   95|      6|      checkValue = checkValue + 60;
+   96|      6|    }
+   97|     66|  }
+   98|     59|  seconds = checkValue;
+   99|     59|  minutes = minute + carryOver;
+  100|     59|  carryOver = 0;
+  101|     59|  balanced = false;
+  102|    123|  while (!balanced) {
+  103|     64|    if (minutes >= 60) {
+  104|      1|      carryOver++;
+  105|      1|      minutes = minutes - 60;
+  106|     63|    } else if (minutes >= 0) {
+  107|     59|      balanced = true;
+  108|     59|    } else {
+  109|      4|      carryOver--;
+  110|      4|      minutes = minutes + 60;
+  111|      4|    }
+  112|     64|  }
+  113|     59|  hours = hour + carryOver;
+  114|     59|}
+  115|       |
+  116|       |// returns the hour components.
+  117|       |// Pre-condiiton: The object exists and has an hours value assigned
+  118|       |// Post Condition: The hour value is returned
+  119|      1|double TimeSpan::getHour() const { return hours; }
+  120|       |
+  121|       |// returns the minute components.
+  122|       |// Pre-condiiton: The object exists and has an minute value assigned
+  123|       |// Post Condition: The minute value is returned
+  124|      1|double TimeSpan::getMinute() const { return minutes; }
+  125|       |
+  126|       |// returns the second components.
+  127|       |// Pre-condiiton: The object exists and has an second value assigned
+  128|       |// Post Condition: The second value is returned
+  129|      1|double TimeSpan::getSecond() const { return seconds; }
+  130|       |
+  131|       |/*
+  132|       |// This function checks to see if TimeSpan is positive. If it is positive, it
+  133|       |will return true. If not, it will return false.
+  134|       |//Pre Condition: The object exists and variables are assigned.
+  135|       |// Post Condition: Returns true if all the values are positive, false if they
+  136|       |are not all postive.
+  137|       |*/
+  138|     15|bool TimeSpan::isPositive() const {
+  139|     15|  bool isNotNegative = (hours >= 0 && minutes >= 0 && seconds >= 0);
+  140|     15|  return isNotNegative;
+  141|     15|}
+  142|       |
+  143|       |/*
+  144|       |This function adds the current TimeSPan with a second one that is passed in,
+  145|       |returning the sum.
+  146|       |
+  147|       |Pre condition: two Timespans exist and one is passed in.
+  148|       |Post condition: The first item. is made equal to the sum.
+  149|       |*/
+  150|      5|TimeSpan TimeSpan::operator+(const TimeSpan &ts) const {
+  151|      5|  TimeSpan tsSum;
+  152|      5|  bool balanced = false;
+  153|      5|  double carryOver = 0;
+  154|      5|  tsSum.seconds = ts.seconds + seconds;
+  155|     12|  while (!balanced) {
+  156|      7|    if (tsSum.seconds >= 60) {
+  157|      2|      carryOver++;
+  158|      2|      tsSum.seconds = tsSum.seconds - 60;
+  159|      5|    } else {
+  160|      5|      balanced = true;
+  161|      5|    }
+  162|      7|  }
+  163|      5|  tsSum.minutes = ts.minutes + minutes + carryOver;
+  164|      5|  balanced = false;
+  165|      5|  carryOver = 0;
+  166|     11|  while (!balanced) {
+  167|      6|    if (tsSum.minutes >= 60) {
+  168|      1|      carryOver++;
+  169|      1|      tsSum.minutes = tsSum.minutes - 60;
+  170|      5|    } else {
+  171|      5|      balanced = true;
+  172|      5|    }
+  173|      6|  }
+  174|      5|  tsSum.hours = ts.hours + hours + carryOver;
+  175|      5|  return tsSum;
+  176|      5|}
+  177|       |
+  178|       |/*
+  179|       |//This function subtracts the current TimeSpan with a second one that is passed
+  180|       |in, returning the sum.
+  181|       |
+  182|       |//Pre condition: two Timespans exist and one is passed in.
+  183|       |//Post condition: The first item. is made equal to the result.
+  184|       |*/
+  185|      6|TimeSpan TimeSpan::operator-(const TimeSpan &ts) const {
+  186|      6|  TimeSpan tsSub;
+  187|      6|  bool balanced = false;
+  188|      6|  double carryOver = 0;
+  189|      6|  tsSub.seconds = seconds - ts.seconds;
+  190|     14|  while (!balanced && hours > 0) {
+  191|      8|    if (tsSub.seconds < 0) {
+  192|      3|      carryOver++;
+  193|      3|      tsSub.seconds = tsSub.seconds + 60;
+  194|      5|    } else {
+  195|      5|      balanced = true;
+  196|      5|    }
+  197|      8|  }
+  198|      6|  tsSub.minutes = minutes - ts.minutes - carryOver;
+  199|      6|  balanced = false;
+  200|      6|  carryOver = 0;
+  201|     12|  while (!balanced && hours > 0) {
+  202|      6|    if (tsSub.minutes < 0) {
+  203|      1|      carryOver++;
+  204|      1|      tsSub.minutes = tsSub.minutes + 60;
+  205|      5|    } else {
+  206|      5|      balanced = true;
+  207|      5|    }
+  208|      6|  }
+  209|      6|  tsSub.hours = hours - ts.hours - carryOver;
+  210|      6|  return tsSub;
+  211|      6|}
+  212|       |
+  213|       |/*
+  214|       |//This method takes in an integer value and multiplies each of the clocks values
+  215|       |with the integer.
+  216|       |//It starts with the seconds, and throughout thep rocess, makes sure to carry
+  217|       |over the overflow without multiplying
+  218|       |//the overflow erroniously.
+  219|       |//Pre condition: A TimeSpan is being mulitplied by an integer.
+  220|       |//Post-Condition: The old TimeSpan values is replaced by the product of the old
+  221|       |values with the integer.
+  222|       |*/
+  223|      9|TimeSpan TimeSpan::operator*(unsigned int number) const {
+  224|      9|  TimeSpan tsLarge;
+  225|      9|  double carryOver = 0;
+  226|      9|  bool balanced = false;
+  227|      9|  tsLarge.seconds = seconds * number;
+  228|     31|  while (!balanced) {
+  229|     22|    if (tsLarge.seconds >= 60) {
+  230|     13|      carryOver++;
+  231|     13|      tsLarge.seconds = tsLarge.seconds - 60;
+  232|     13|    } else {
+  233|      9|      balanced = true;
+  234|      9|    }
+  235|     22|  }
+  236|      9|  tsLarge.minutes = (minutes * number) + carryOver;
+  237|      9|  balanced = false;
+  238|      9|  carryOver = 0;
+  239|     25|  while (!balanced) {
+  240|     16|    if (tsLarge.minutes >= 60) {
+  241|      7|      carryOver++;
+  242|      7|      tsLarge.minutes = tsLarge.minutes - 60;
+  243|      9|    } else {
+  244|      9|      balanced = true;
+  245|      9|    }
+  246|     16|  }
+  247|      9|  tsLarge.hours = (hours * number) + carryOver;
+  248|      9|  return tsLarge;
+  249|      9|}
+  250|       |
+  251|       |/*
+  252|       |//This function comapares two TimeSpans. If the hour, minute, and second count
+  253|       |are all equal, it returns true.
+  254|       |//Pre Condition: Two Timespans that have been assigned values are being
+  255|       |compares.
+  256|       |//Post Condition: If the hours, minutes, and seconds count are all equal, it
+  257|       |returns true. Otherwise it returns false.
+  258|       |*/
+  259|     15|bool TimeSpan::operator==(const TimeSpan &ts) const {
+  260|     15|  bool returnValue = true;
+  261|     15|  if (hours != ts.hours) {
+  262|      1|    returnValue = false;
+  263|     14|  } else if (minutes != ts.minutes) {
+  264|      2|    returnValue = false;
+  265|     12|  } else if (seconds != ts.seconds) {
+  266|      1|    returnValue = false;
+  267|      1|  }
+  268|     15|
+  269|     15|  return returnValue;
+  270|     15|}
+  271|       |
+  272|       |/*
+  273|       |//This function comapares two TimeSpans. If the hour, minute, and second count
+  274|       |are all equal, it returns false.
+  275|       |//Pre Condition: Two Timespans that have been assigned values are being
+  276|       |compares.
+  277|       |//Post Condition: If the hours, minutes, and seconds count are all equal, it
+  278|       |returns false. Otherwise it returns true.
+  279|       |*/
+  280|      2|bool TimeSpan::operator!=(const TimeSpan &ts) const {
+  281|      2|  bool returnValue = false;
+  282|      2|  if (hours != ts.hours) {
+  283|      1|    returnValue = true;
+  284|      1|  }
+  285|      2|  if (minutes != ts.minutes) {
+  286|      1|    returnValue = true;
+  287|      1|  }
+  288|      2|  if (seconds != ts.seconds) {
+  289|      1|    returnValue = true;
+  290|      1|  }
+  291|      2|
+  292|      2|  return returnValue;
+  293|      2|}
+  294|       |/*
+  295|       |This function checks if the first Timespan Object is less than  to
+  296|       |Timespan Object. It returns a bool value. If the first object is less than  to
+  297|       |the Timespan Object, it returns true. Otherwise, it returns false.
+  298|       |
+  299|       |Pre-condition: Two Timespan objects exist.
+  300|       |Post Condition: True or false is returned.
+  301|       |
+  302|       |*/
+  303|      8|bool TimeSpan::operator>(const TimeSpan &ts) const {
+  304|      8|  bool returnValue = false;
+  305|      8|  if (hours > ts.hours) {
+  306|      1|    returnValue = true;
+  307|      7|  } else if (hours < ts.hours) {
+  308|      1|    returnValue = false;
+  309|      6|  } else if (minutes > ts.minutes) {
+  310|      1|    returnValue = true;
+  311|      5|  } else if (minutes < ts.minutes) {
+  312|      1|    returnValue = false;
+  313|      4|  } else if (seconds > ts.seconds) {
+  314|      2|    returnValue = true;
+  315|      2|  } else if (seconds < ts.seconds) {
+  316|      1|    returnValue = false;
+  317|      1|  }
+  318|      8|
+  319|      8|  return returnValue;
+  320|      8|}
+  321|       |/*
+  322|       |This function checks if the first Timespan Object is more than  to
+  323|       |Timespan Object. It returns a bool value. If the first object is more than  to
+  324|       |the Timespan Object, it returns true. Otherwise, it returns false.
+  325|       |
+  326|       |Pre-condition: Two Timespan objects exist.
+  327|       |Post Condition: True or false is returned.
+  328|       |
+  329|       |*/
+  330|       |
+  331|      7|bool TimeSpan::operator<(const TimeSpan &ts) const {
+  332|      7|  bool returnValue = false;
+  333|      7|  if (hours > ts.hours) {
+  334|      1|    returnValue = false;
+  335|      6|  } else if (hours < ts.hours) {
+  336|      1|    returnValue = true;
+  337|      5|  } else if (minutes > ts.minutes) {
+  338|      1|    returnValue = false;
+  339|      4|  } else if (minutes < ts.minutes) {
+  340|      1|    returnValue = true;
+  341|      3|  } else if (seconds > ts.seconds) {
+  342|      1|    returnValue = false;
+  343|      2|  } else if (seconds < ts.seconds) {
+  344|      1|    returnValue = true;
+  345|      1|  }
+  346|      7|
+  347|      7|  return returnValue;
+  348|      7|}
+  349|       |/*
+  350|       |This function checks if the first Timespan Object is less than or equal to
+  351|       |Timespan Object. It returns a bool value. If the first object is less than or
+  352|       |equal to the Timespan Object, it returns true. Otherwise, it returns false.
+  353|       |
+  354|       |Pre-condition: Two Timespan objects exist.
+  355|       |Post Condition: True or false is returned.
+  356|       |
+  357|       |*/
+  358|      7|bool TimeSpan::operator<=(const TimeSpan &ts) const {
+  359|      7|  bool returnValue = true;
+  360|      7|  if (hours == ts.hours && minutes == ts.minutes && seconds == ts.seconds) {
+  361|      1|    returnValue = true;
+  362|      6|  } else if (hours > ts.hours) {
+  363|      1|    returnValue = false;
+  364|      5|  } else if (hours < ts.hours) {
+  365|      1|    returnValue = true;
+  366|      4|  } else if (minutes > ts.minutes) {
+  367|      1|    returnValue = false;
+  368|      3|  } else if (minutes < ts.minutes) {
+  369|      1|    returnValue = true;
+  370|      2|  } else if (seconds > ts.seconds) {
+  371|      1|    returnValue = false;
+  372|      1|  } else if (seconds < ts.seconds) {
+  373|      1|    returnValue = true;
+  374|      1|  }
+  375|      7|
+  376|      7|  return returnValue;
+  377|      7|}
+  378|       |/*
+  379|       |This function checks if the first Timespan Object is more than or equal to
+  380|       |Timespan Object. It returns a bool value. If the first object is more than or
+  381|       |equal to the Timespan Object, it returns true. Otherwise, it returns false.
+  382|       |
+  383|       |Pre-condition: Two Timespan objects exist.
+  384|       |Post Condition: True or false is returned.
+  385|       |
+  386|       |*/
+  387|      8|bool TimeSpan::operator>=(const TimeSpan &ts) const {
+  388|      8|  bool returnValue = false;
+  389|      8|  if (hours == ts.hours && minutes == ts.minutes && seconds == ts.seconds) {
+  390|      1|    returnValue = true;
+  391|      7|  } else if (hours > ts.hours) {
+  392|      1|    returnValue = true;
+  393|      6|  } else if (hours < ts.hours) {
+  394|      1|    returnValue = false;
+  395|      5|  } else if (minutes > ts.minutes) {
+  396|      1|    returnValue = true;
+  397|      4|  } else if (minutes < ts.minutes) {
+  398|      1|    returnValue = false;
+  399|      3|  } else if (seconds > ts.seconds) {
+  400|      2|    returnValue = true;
+  401|      2|  } else if (seconds < ts.seconds) {
+  402|      1|    returnValue = false;
+  403|      1|  }
+  404|      8|
+  405|      8|  return returnValue;
+  406|      8|}
+  407|       |/*
+  408|       |This function has a simiillar use to the addition function. However, it instead
+  409|       |uses the += operator.
+  410|       |
+  411|       |Pre condition: two Timespans exist and one is passed in.
+  412|       |Post condition: The first item. is made equal to the sum.
+  413|       |*/
+  414|      3|TimeSpan TimeSpan::operator+=(const TimeSpan &ts) const {
+  415|      3|  TimeSpan tsSum;
+  416|      3|  bool balanced = false;
+  417|      3|  double carryOver = 0;
+  418|      3|  tsSum.seconds = ts.seconds + seconds;
+  419|      7|  while (!balanced) {
+  420|      4|    if (tsSum.seconds >= 60) {
+  421|      1|      carryOver++;
+  422|      1|      tsSum.seconds = tsSum.seconds - 60;
+  423|      3|    } else {
+  424|      3|      balanced = true;
+  425|      3|    }
+  426|      4|  }
+  427|      3|  tsSum.minutes = ts.minutes + minutes + carryOver;
+  428|      3|  balanced = false;
+  429|      3|  carryOver = 0;
+  430|      7|  while (!balanced) {
+  431|      4|    if (tsSum.minutes >= 60) {
+  432|      1|      carryOver++;
+  433|      1|      tsSum.minutes = tsSum.minutes - 60;
+  434|      3|    } else {
+  435|      3|      balanced = true;
+  436|      3|    }
+  437|      4|  }
+  438|      3|  tsSum.hours = ts.hours + hours + carryOver;
+  439|      3|  return tsSum;
+  440|      3|}
+  441|       |
+  442|       |/*
+  443|       |This function has a simiillar use to the subtraction function. However, it
+  444|       |instead uses the -= operator.
+  445|       |
+  446|       |Pre condition: two Timespans exist and one is passed in.
+  447|       |Post condition: The first item. is made equal to the result.
+  448|       |*/
+  449|      5|TimeSpan TimeSpan::operator-=(const TimeSpan &ts) const {
+  450|      5|  TimeSpan tsSub;
+  451|      5|  bool balanced = false;
+  452|      5|  double carryOver = 0;
+  453|      5|  tsSub.seconds = seconds - ts.seconds;
+  454|     10|  while (!balanced && hours > 0) {
+  455|      5|    if (tsSub.seconds < 0) {
+  456|      1|      carryOver++;
+  457|      1|      tsSub.seconds = tsSub.seconds + 60;
+  458|      4|    } else {
+  459|      4|      balanced = true;
+  460|      4|    }
+  461|      5|  }
+  462|      5|  tsSub.minutes = minutes - ts.minutes - carryOver;
+  463|      5|  balanced = false;
+  464|      5|  carryOver = 0;
+  465|     10|  while (!balanced && hours > 0) {
+  466|      5|    if (tsSub.minutes < 0) {
+  467|      1|      carryOver++;
+  468|      1|      tsSub.minutes = tsSub.minutes + 60;
+  469|      4|    } else {
+  470|      4|      balanced = true;
+  471|      4|    }
+  472|      5|  }
+  473|      5|  tsSub.hours = hours - ts.hours - carryOver;
+  474|      5|  return tsSub;
+  475|      5|}
+
+Sun Apr 25 23:37:51 PDT 2021
+=====================================================
+To create an output.txt file with all the output from this script
+Run the below command
+      ./create-output.sh > output.txt 2>&1 
+=====================================================
