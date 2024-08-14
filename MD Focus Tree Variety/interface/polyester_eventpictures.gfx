@@ -1,0 +1,10 @@
+spriteTypes = {
+
+	spriteType = {  
+
+    	name = "GFX_report_event_polyester_usa.1"  
+
+    	texturefile = "gfx/event_pictures/report_event/united_states/progressive_choice.dds"
+
+	}
+}
